@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaronaCount</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="ph ph-car-profile"></i>
+                <h1>CaronaCount</h1>
+            </div>
+            <button id="settings-btn" class="icon-btn"><i class="ph ph-gear"></i></button>
+        </header>
+
+        <section class="summary-card">
+            <span class="summary-title">Saldo Atual</span>
+            <h2 id="current-total">R$ 0,00</h2>
+            <div class="summary-details" id="last-closing-info">
+                Último fechamento: <span id="last-closing-date">Nenhum</span>
+            </div>
+        </section>
+
+        <section class="calendar-section">
+            <div class="calendar-header">
+                <button id="prev-month" class="icon-btn"><i class="ph ph-caret-left"></i></button>
+                <h3 id="current-month-year">Mês</h3>
+                <button id="next-month" class="icon-btn"><i class="ph ph-caret-right"></i></button>
+            </div>
+            <div class="calendar-weekdays">
+                <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+            </div>
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Days rendered by JS -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Modals / Bottom Sheets -->
+    <div class="modal-overlay" id="day-modal">
+        <div class="bottom-sheet">
+            <div class="sheet-header">
+                <h3 id="selected-date-title">Data</h3>
+                <button class="close-btn" id="close-day-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="sheet-content">
+                <div class="counter-group">
+                    <div class="counter-info">
+                        <h4>Carona Completa</h4>
+                        <span class="price-hint" id="hint-full-price">R$ 10,00</span>
+                    </div>
+                    <div class="counter-controls">
+                        <button class="circle-btn" id="btn-dec-full"><i class="ph ph-minus"></i></button>
+                        <span class="count-value" id="count-full">0</span>
+                        <button class="circle-btn" id="btn-inc-full"><i class="ph ph-plus"></i></button>
+                    </div>
+                </div>
+
+                <div class="counter-group">
+                    <div class="counter-info">
+                        <h4>Meia Carona</h4>
+                        <span class="price-hint" id="hint-half-price">R$ 5,00</span>
+                    </div>
+                    <div class="counter-controls">
+                        <button class="circle-btn" id="btn-dec-half"><i class="ph ph-minus"></i></button>
+                        <span class="count-value" id="count-half">0</span>
+                        <button class="circle-btn" id="btn-inc-half"><i class="ph ph-plus"></i></button>
+                    </div>
+                </div>
+
+                <div class="discount-section">
+                    <h4>Desconto / Gastos do Dia</h4>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Valor (R$)</label>
+                            <input type="number" id="discount-amount" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="input-group" style="flex: 2;">
+                            <label>Motivo</label>
+                            <input type="text" id="discount-reason" placeholder="Ex: Corrida, falta...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-section">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="is-closing-checkbox">
+                        <span class="slider"></span>
+                        <span class="toggle-label">Marcar como Fechamento</span>
+                    </label>
+                </div>
+
+                <div class="day-total">
+                    <span>Total do dia:</span>
+                    <strong id="day-calculated-total">R$ 0,00</strong>
+                </div>
+
+                <div class="closing-total-box" id="closing-total-box" style="display: none;">
+                    <span>Total do Período Fechado:</span>
+                    <h3 id="period-calculated-total">R$ 0,00</h3>
+                </div>
+
+                <button class="primary-btn" id="save-day-btn">Salvar Registro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-dialog">
+            <div class="sheet-header">
+                <h3>Configurações</h3>
+                <button class="close-btn" id="close-settings-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="sheet-content">
+                <div class="input-group">
+                    <label>Valor Carona Completa (R$)</label>
+                    <input type="number" id="setting-full-price" step="0.01" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Valor Meia Carona (R$)</label>
+                    <input type="number" id="setting-half-price" step="0.01" min="0">
+                </div>
+                <button class="primary-btn" id="save-settings-btn" style="margin-top: 16px;">Salvar Configurações</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
