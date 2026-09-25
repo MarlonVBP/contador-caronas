@@ -46,6 +46,7 @@ function init() {
     renderCalendar();
     updateSummary();
     setupEventListeners();
+    initParticles();
 }
 
 // Data Management
@@ -367,6 +368,72 @@ function formatCurrency(value) {
         style: 'currency',
         currency: 'BRL'
     }).format(value);
+}
+
+// Ocean Particles Logic
+function initParticles() {
+    const canvas = document.getElementById('particles-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    let width, height, particles;
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.size = Math.random() * 1.5 + 0.5;
+            this.speed = Math.random() * 0.3 + 0.1;
+            this.angle = Math.random() * Math.PI * 2;
+        }
+        update() {
+            this.angle += this.speed * 0.02;
+            this.y -= this.speed * 0.5; // slow drift upwards
+            this.x += Math.sin(this.angle) * 0.5; // gentle wave motion
+            
+            // Loop around screen
+            if (this.y < -10) this.y = height + 10;
+            if (this.x < -10) this.x = width + 10;
+            if (this.x > width + 10) this.x = -10;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function createParticles() {
+        particles = [];
+        const numParticles = Math.floor((width * height) / 10000); // Amount of particles based on screen size
+        for (let i = 0; i < numParticles; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+        resize();
+        createParticles();
+    });
+
+    resize();
+    createParticles();
+    animate();
 }
 
 // Run
